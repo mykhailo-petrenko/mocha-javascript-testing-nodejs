@@ -17,4 +17,26 @@ describe("AuthController", function() {
 
     });
 
+    describe("isAuthorisedAsync", function() {
+
+        it("Should return false if not authorized", function(done) {
+            this.timeout(2300);
+
+            authController.isAuthorisedAsync(['admin'], 'user', function(isAuthorised) {
+                assert.equal(false, isAuthorised);
+                done();
+            });
+        });
+
+        it("Should return true if authorised", function(done) {
+            this.timeout(2200);
+
+            authController.isAuthorisedAsync(['admin', 'user'], 'user', function(isAuthorised) {
+                assert.equal(true, isAuthorised);
+                done();
+            });
+        });
+
+    });
+
 });
