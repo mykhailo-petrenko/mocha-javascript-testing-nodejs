@@ -1,12 +1,16 @@
 class AuthController {
-    isAuthorised(roles, neededRole) {
-        return roles.includes(neededRole);
+    setRoles(roles) {
+        this.roles = roles;
     }
 
-    isAuthorisedAsync(roles, neededRole, callback) {
+    isAuthorised(neededRole) {
+        return this.roles.includes(neededRole);
+    }
+
+    isAuthorisedAsync(neededRole, callback) {
         return setTimeout(() => {
-            callback(this.isAuthorised(roles, neededRole));
-        }, 2123);
+            callback(this.isAuthorised(neededRole));
+        }, 100);
     }
 }
 
