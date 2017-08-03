@@ -19,13 +19,15 @@ describe("AuthController", function() {
             assert.equal(true, authController.isAuthorised('admin'));
         });
 
+        it("Should not allow to get if unauthorized");
+        it("Should allow to get if authorized");
     });
 
     describe("isAuthorisedAsync", function() {
 
         it("Should return false if not authorized", function(done) {
             this.timeout(2300);
-
+            this.skip();
             authController.isAuthorisedAsync('guest', function(isAuthorised) {
                 assert.equal(false, isAuthorised);
                 done();
