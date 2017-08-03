@@ -1,5 +1,7 @@
 const assert = require('assert');
 const AuthController = require('../../controllers/AuthController');
+const expect = require('chai').expect;
+const should = require('chai').should();
 
 describe("AuthController", function() {
     const authController = new AuthController();
@@ -11,7 +13,11 @@ describe("AuthController", function() {
     describe("isAuthorised", function() {
 
         it("Should return false if not authorized", function() {
-            assert.equal(false, authController.isAuthorised('guest'));
+            var isAuthorised = authController.isAuthorised('guest');
+
+            assert.equal(false, isAuthorised);
+            expect(isAuthorised).to.be.false;
+            isAuthorised.should.be.false;
         });
 
         it("Should return true if authorised", function() {
