@@ -1,3 +1,5 @@
+const should = require('chai').should();
+
 describe.only("Objects demo", function() {
 
     var user = {
@@ -20,5 +22,11 @@ describe.only("Objects demo", function() {
 
     it("Should compare objects", function() {
         user.should.be.deep.equal(anotherUser);
+    });
+
+    it("Should allow to test nulls", function() {
+        var isAuth = null;
+
+        should.not.exist(isAuth);
     });
 });
