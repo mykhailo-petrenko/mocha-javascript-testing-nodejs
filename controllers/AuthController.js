@@ -12,6 +12,14 @@ class AuthController {
             callback(this.isAuthorised(neededRole));
         }, 100);
     }
+
+    isAuthorisedPromise(neededRole) {
+        return new Promise((resolve) => {
+            return setTimeout(() => {
+                resolve(this.isAuthorised(neededRole));
+            }, 100);
+        });
+    }
 }
 
 module.exports = AuthController;

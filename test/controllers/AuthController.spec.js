@@ -1,7 +1,10 @@
 const assert = require('assert');
 const AuthController = require('../../controllers/AuthController');
 const expect = require('chai').expect;
-const should = require('chai').should();
+const chai = require('chai');
+const chaiAsPrimised = require('chai-as-promised');
+chai.use(chaiAsPrimised);
+chai.should();
 
 describe("AuthController", function() {
     const authController = new AuthController();
@@ -51,4 +54,14 @@ describe("AuthController", function() {
 
     });
 
-});
+    describe.only("isAuthorisedPromice", function() {
+
+        it("Should return false if not authorized", function() {
+            return authController.isAuthorisedPromise('guest').should.eventually.be.false;
+        });
+
+        it("Should return true if authorised", function() {
+            return authController.isAuthorisedPromise('user').should.eventually.be.true;
+        });
+    });
+}); 

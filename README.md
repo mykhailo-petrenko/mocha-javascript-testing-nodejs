@@ -29,3 +29,30 @@ Fot test passing should not be throwed any exceptions.
 * it("with description") // and without function displays as pending test
 * Use describe.only(..) or it.only(..) to run selecter tests and skip other tests
 * Skip tests: describe.skip(..), it.skip(..) or this.skip() for it('', callback)
+
+### Chai BDD Style
+http://chaijs.com/api/bdd/
+
+#### Install
+```
+npm i -D chai chai-as-promised
+```
+
+```javascript
+const chai = require('chai');
+const chaiAsPrimised = require('chai-as-promised');
+chai.use(chaiAsPrimised); // Use middleware to tests promices
+const should = chai.should();
+```
+
+#### Usage
+```javascript
+// Object properties
+foobar.should.have.property('name').and.equal('John')
+// Compagre objects
+objectUno.should.deep.equal(objectDos);
+// Null
+should.not.exist(stolenObject);
+// Promises
+return getPromiseAsResponse().should.eventually.be.true;
+```
