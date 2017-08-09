@@ -1,6 +1,6 @@
 const should = require('chai').should();
 
-describe.only("Objects demo", function() {
+describe("Objects demo", function() {
 
     var user = {
         name: "John",

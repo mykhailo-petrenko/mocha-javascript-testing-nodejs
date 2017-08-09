@@ -3,6 +3,7 @@ const AuthController = require('../../controllers/AuthController');
 const expect = require('chai').expect;
 const chai = require('chai');
 const chaiAsPrimised = require('chai-as-promised');
+const sinon = require('sinon');
 chai.use(chaiAsPrimised);
 chai.should();
 
@@ -54,7 +55,7 @@ describe("AuthController", function() {
 
     });
 
-    describe.only("isAuthorisedPromice", function() {
+    describe("isAuthorisedPromice", function() {
 
         it("Should return false if not authorized", function() {
             return authController.isAuthorisedPromise('guest').should.eventually.be.false;
@@ -62,6 +63,20 @@ describe("AuthController", function() {
 
         it("Should return true if authorised", function() {
             return authController.isAuthorisedPromise('user').should.eventually.be.true;
+        });
+    });
+
+    describe('getIndex', function() {
+        it('should render index once', function() {
+            var req = {};
+            var res = {
+                render: sinon.spy()
+            };
+
+            authController.getIndex(req, res);
+
+            res.render.calledOnce.should.be.true;
+            res.render.firstCall.args[0].should.equal('index');
         });
     });
 }); 

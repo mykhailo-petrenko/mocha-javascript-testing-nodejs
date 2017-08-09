@@ -20,6 +20,10 @@ class AuthController {
             }, 100);
         });
     }
+
+    getIndex(req, res) {
+        res.render('index');
+    }
 }
 
 module.exports = AuthController;
