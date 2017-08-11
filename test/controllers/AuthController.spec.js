@@ -22,7 +22,7 @@ describe("AuthController", function() {
         // authController.setRoles(['admin', 'user']);
     });
 
-    describe.only("isAuthorised", function() {
+    describe("isAuthorised", function() {
 
         it("Should return false if not authorized", function() {
             var isAuthorised = authController.isAuthorised('guest');
@@ -79,16 +79,44 @@ describe("AuthController", function() {
     });
 
     describe('getIndex', function() {
-        it('should render index once', function() {
-            var req = {};
-            var res = {
+        var user, res;
+
+        beforeEach(function() {
+            user = new User([]);
+            res = {
                 render: sinon.spy()
             };
+        });
+        
+        it('should render index for admin', function() {
+            var isAuthorised = sinon.stub(user, 'isAuthorised' ).returns(true);
+            var req = {user: user};
+            
 
             authController.getIndex(req, res);
-
+            isAuthorised.calledOnce.should.be.true;
             res.render.calledOnce.should.be.true;
             res.render.firstCall.args[0].should.equal('index');
+        });
+
+        it('should render error is not admin', function() {
+            var isAuthorised = sinon.stub(user, 'isAuthorised' ).returns(false);
+            var req = {user: user};
+
+            authController.getIndex(req, res);
+            isAuthorised.calledOnce.should.be.true;
+            res.render.calledOnce.should.be.true;
+            res.render.firstCall.args[0].should.equal('error');
+        });
+
+        it('should render exception when error is catched', function() {
+            var isAuthorised = sinon.stub(user, 'isAuthorised' ).throws();
+            var req = {user: user};
+
+            authController.getIndex(req, res);
+            isAuthorised.calledOnce.should.be.true;
+            res.render.calledOnce.should.be.true;
+            res.render.firstCall.args[0].should.equal('exception');
         });
     });
 }); 

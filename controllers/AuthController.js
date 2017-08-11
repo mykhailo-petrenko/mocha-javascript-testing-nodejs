@@ -38,7 +38,15 @@ class AuthController {
     }
 
     getIndex(req, res) {
-        res.render('index');
+        try {
+            if (req.user.isAuthorised('admin')) {
+                res.render('index');
+            } else {
+                res.render('error');
+            }
+        } catch(e) {
+            res.render('exception');
+        }
     }
 }
 
