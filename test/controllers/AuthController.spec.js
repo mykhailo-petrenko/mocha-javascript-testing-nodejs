@@ -78,45 +78,55 @@ describe("AuthController", function() {
         });
     });
 
-    describe('getIndex', function() {
+    describe.only('getIndex', function() {
         var user, res;
 
         beforeEach(function() {
             user = new User([]);
             res = {
-                render: sinon.spy()
+                render: function() {
+                    
+                }
             };
         });
         
         it('should render index for admin', function() {
             var isAuthorised = sinon.stub(user, 'isAuthorised' ).returns(true);
             var req = {user: user};
-            
+            var mock = sinon.mock(res);
+
+            mock.expects('render').once().withExactArgs('index');
 
             authController.getIndex(req, res);
+
             isAuthorised.calledOnce.should.be.true;
-            res.render.calledOnce.should.be.true;
-            res.render.firstCall.args[0].should.equal('index');
+            mock.verify();
         });
 
         it('should render error is not admin', function() {
             var isAuthorised = sinon.stub(user, 'isAuthorised' ).returns(false);
             var req = {user: user};
 
+            var mock = sinon.mock(res);
+            mock.expects('render').once().withExactArgs('error');
+
             authController.getIndex(req, res);
+
             isAuthorised.calledOnce.should.be.true;
-            res.render.calledOnce.should.be.true;
-            res.render.firstCall.args[0].should.equal('error');
+            mock.verify();
         });
 
         it('should render exception when error is catched', function() {
             var isAuthorised = sinon.stub(user, 'isAuthorised' ).throws();
             var req = {user: user};
 
+            var mock = sinon.mock(res);
+            mock.expects('render').once().withExactArgs('exception');
+
             authController.getIndex(req, res);
+
             isAuthorised.calledOnce.should.be.true;
-            res.render.calledOnce.should.be.true;
-            res.render.firstCall.args[0].should.equal('exception');
+            mock.verify();
         });
     });
 }); 
