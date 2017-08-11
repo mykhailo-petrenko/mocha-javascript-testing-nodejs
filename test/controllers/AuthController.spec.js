@@ -1,5 +1,4 @@
 const assert = require('assert');
-const AuthController = require('../../controllers/AuthController');
 const expect = require('chai').expect;
 const chai = require('chai');
 const chaiAsPrimised = require('chai-as-promised');
@@ -7,14 +6,23 @@ const sinon = require('sinon');
 chai.use(chaiAsPrimised);
 chai.should();
 
+const AuthController = require('../../controllers/AuthController');
+const User = require('../../model/User');
+
 describe("AuthController", function() {
     const authController = new AuthController();
+    var user;
 
     beforeEach(function() {
-        authController.setRoles(['admin', 'user']);
+        user = new User(['admin', 'user']);
+
+        sinon.spy(user, 'isAuthorised');
+
+        authController.setUser(user);
+        // authController.setRoles(['admin', 'user']);
     });
 
-    describe("isAuthorised", function() {
+    describe.only("isAuthorised", function() {
 
         it("Should return false if not authorized", function() {
             var isAuthorised = authController.isAuthorised('guest');
@@ -22,11 +30,15 @@ describe("AuthController", function() {
             assert.equal(false, isAuthorised);
             expect(isAuthorised).to.be.false;
             isAuthorised.should.be.false;
+
+            user.isAuthorised.calledOnce.should.be.true;
         });
 
         it("Should return true if authorised", function() {
             assert.equal(true, authController.isAuthorised('user'));
             assert.equal(true, authController.isAuthorised('admin'));
+
+            user.isAuthorised.calledTwice.should.be.true;
         });
 
         it("Should not allow to get if unauthorized");

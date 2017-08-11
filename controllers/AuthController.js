@@ -1,10 +1,26 @@
+const User = require('../model/User');
+
 class AuthController {
-    setRoles(roles) {
-        this.roles = roles;
+
+    setUser(user) {
+        if ( !(user instanceof User) ) {
+            throw("Param should be instace of User");
+        }
+
+        this.user = user;
     }
 
+    setRoles(roles) {
+        if (this.user) {
+            this.user.setRoles(roles);
+        }
+    }
+
+
     isAuthorised(neededRole) {
-        return this.roles.includes(neededRole);
+        if (this.user) {
+            return this.user.isAuthorised(neededRole);
+        }
     }
 
     isAuthorisedAsync(neededRole, callback) {
