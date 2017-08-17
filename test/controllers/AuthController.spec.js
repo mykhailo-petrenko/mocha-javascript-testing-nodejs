@@ -78,7 +78,7 @@ describe("AuthController", function() {
         });
     });
 
-    describe.only('getIndex', function() {
+    describe('getIndex', function() {
         var user, res;
 
         beforeEach(function() {
