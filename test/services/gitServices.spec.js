@@ -1,26 +1,51 @@
-const gitService = require('../../services/gitService');
+const https = require('https');
+const sinon = require('sinon');
+const PassThrough = require('stream').PassThrough;
 
-var service = require('../../services/gitService')();
+const gitService = require('../../services/gitService')();
+
+const gitUsersJSON = {
+    login: 'mykhailo-petrenko'
+};
+const gitReposJSON = [{id: 12312}, {id: 234234}];
 
 describe.only("gitService", function() {
     
     describe("getUser", function() {
+        var userRespose, reposResponse;
 
-        it("should return requested user", function(done) {
-            this.timeout(10000);
+        beforeEach(function() {
+            this.request = sinon.stub(https, 'request');
 
-            service
+            userRespose = new PassThrough();
+            userRespose.write(JSON.stringify(gitUsersJSON));
+            userRespose.end();
+
+            reposResponse = new PassThrough();
+            reposResponse.write(JSON.stringify(gitReposJSON));
+            reposResponse.end();
+
+            this.request
+                .onFirstCall().callsArgWith(1, userRespose)
+                .onFirstCall().returns(new PassThrough())
+                .onSecondCall().callsArgWith(1, reposResponse)
+                .onSecondCall().returns(new PassThrough());
+        });
+
+        afterEach(function() {
+            this.request.restore();
+        });
+
+        it("should return requested user", function() {
+            return gitService
                 .getUser('mykhailo-petrenko')
                 .then((user) => {
                     user.login.should.be.equal('mykhailo-petrenko');
-                    done();
                 });
         });
 
         it("should return user with repos", function() {
-            this.timeout(10000);
-
-            return service.getUser('mykhailo-petrenko')
+            return gitService.getUser('mykhailo-petrenko')
                 .should.eventually.have.property('repos').and.not.be.empty;
         });
 
