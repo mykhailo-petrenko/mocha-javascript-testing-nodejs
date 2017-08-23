@@ -49,6 +49,23 @@ describe.only("gitService", function() {
                 .should.eventually.have.property('repos').and.not.be.empty;
         });
 
+        it("User-Agent should be sended in request headers", function() {
+            return gitService
+                .getUser('test')
+                .then((user) => {
+                    var args = this.request.getCall(0).args;
+                    args[0].headers['User-Agent'].should.be.equal('gitExample');
+                });
+        });
+
+        it("Path in repos request should be `/users/${userId}/repos`", function() {
+            return gitService
+                .getUser('test')
+                .then(user => {
+                    var args = this.request.getCall(1).args;
+                    args[0].path.should.be.equal('/users/test/repos');
+                })
+        });
     });
 
 });
